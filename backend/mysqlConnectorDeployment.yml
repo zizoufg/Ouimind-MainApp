@@ -12,13 +12,9 @@ spec:
       labels:
         app: mysql-connector
     spec:
-      hostNetwork: true
       containers:
         - name: mysql-connector
-          image: zizoufg/mysql_connector:v1.0
+          image: zizoufg/mysql-connector:v1.0
           ports:
-            - containerPort: 3002
-        - name: consul-agent
-          image: consul:1.9.9
-          args: ["agent", "-dev"]
-       
+            - containerPort: 3000
+        

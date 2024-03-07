@@ -1,16 +1,7 @@
-# consul.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: consul
-
----
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: consul
-  namespace: consul
 spec:
   replicas: 1
   serviceName: consul
@@ -29,4 +20,4 @@ spec:
         - containerPort: 8500
           name: http
         - containerPort: 8600
-          name: dns
+          name: DNS
