@@ -13,6 +13,7 @@
     "consul": "^1.2.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "helm": "^0.2.1",
     "kubectl": "^0.0.0",
     "kubernetes": "^1.0.0",
     "nodemon": "^3.1.0",

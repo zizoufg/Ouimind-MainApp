@@ -15,10 +15,4 @@ spec:
       containers:
         - name: main-app-container
           image: zizoufg/main-app:v1.0
-          volumeMounts:
-            - name: txt-volume
-              mountPath: /backend/mysqlConnectorInstances.txt
-      volumes:
-        - name: txt-volume
-          persistentVolumeClaim:
-            claimName: shared-txt-pvc
+          

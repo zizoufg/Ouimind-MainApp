@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-connector-{{ .Values.INSTANCE_ID }}-service
+spec:
+  type:  LoadBalancer
+  selector:
+    app: mysql-connector-{{ .Values.INSTANCE_ID }}  
+  ports:
+    - protocol: TCP
+      port: {{ .Values.SERVICE_PORT }}   
+      targetPort: 3000 

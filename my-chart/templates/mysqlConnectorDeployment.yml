@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-connector-{{.Values.INSTANCE_ID }}-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-connector-{{.Values.INSTANCE_ID}}
+  template:
+    metadata:
+      labels:
+        app: mysql-connector-{{.Values.INSTANCE_ID }}
+    spec:
+      containers:
+        - name: mysql-connector-{{.Values.INSTANCE_ID }}
+          image: zizoufg/mysql-connector:v1.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: INSTANCE_ID 
+              value: "{{.Values.INSTANCE_ID }}"
+            - name: SERVICE_PORT 
+              value: "{{.Values.SERVICE_PORT }}"
+        

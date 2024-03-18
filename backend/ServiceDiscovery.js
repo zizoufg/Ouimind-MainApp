@@ -4,16 +4,18 @@ async function getService(serviceName){
     
     
     try {
-        console.log('Performing service discovery for:', serviceName);
+       
+
         
         // Query Consul for the list of nodes providing the service
-        const nodes = await  consulClient.catalog.service.nodes(serviceName)
+        const nodes =  await consulClient.catalog.service.nodes(serviceName);
                 
 
         console.log('Service discovery successful.');
+        console.log(nodes);
         
         if (!nodes || nodes.length === 0) {
-            throw new Error(`No instances of service '${serviceName}' found`);
+            console.log(`No instances of service '${serviceName}' found`);
         }
 
         // Extract IP address and port of each node
