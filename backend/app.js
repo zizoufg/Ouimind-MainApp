@@ -50,12 +50,12 @@ function allocatePort() {
 // Function to deploy MySQLConnector microservice and create/update the corresponding service
 async function deployMySQLConnector() {
     try {
-        const INSTANCE_ID = uuidv4();
+        const INSTANCE_ID = uuidv4().slice(0,8);
         console.log('INSTANCE_ID:', INSTANCE_ID);
         // Allocate a unique port for the service
         const servicePort = allocatePort();
        
-        const command = `helm install mysql-connector ./my-chart --set INSTANCE_ID=${INSTANCE_ID} --set SERVICE_PORT=${servicePort}`; 
+        const command = `helm install mysql-connector-${INSTANCE_ID} ./my-chart --set INSTANCE_ID=${INSTANCE_ID} --set SERVICE_PORT=${servicePort}`; 
 
         exec(command, (error, stdout, stderr) => {
             if (error) {
@@ -134,27 +134,35 @@ async function deployMySQLConnector() {
 
 // API endpoint for adding MySQLConnector extension
 app.post("/api/add-mysql-connector", async (req, res) => {
-    
     try {
         // Deploy MySQLConnector microservice and get the INSTANCE_ID
         const instanceId = await deployMySQLConnector();
         
-        
         // Use instanceId here
         console.log("Using INSTANCE_ID in app.post:", instanceId);
         
-        // Perform service discovery
-        const nodeInfo = await getService(`mysql-connector-${instanceId}`);
+        // Introduce a delay before performing service discovery
+        setTimeout(async () => {
+            try {
+                // Perform service discovery
+                const nodeInfo = await getService(`mysql-connector-${instanceId}`);
 
-        nodeInfo.forEach(({ ipAddress, port }) => {
-            console.log(`Discovered service - IP: ${ipAddress}, Port: ${port}`);
-            // Use ipAddress and port to communicate with the discovered service
-        });
+                nodeInfo.forEach(({ ipAddress, port }) => {
+                    console.log(`Discovered service - IP: ${ipAddress}, Port: ${port}`);
+                    // Use ipAddress and port to communicate with the discovered service
+                });
 
-        res.send('MySQLConnector microservice deployed successfully');
+                res.send('MySQLConnector microservice deployed successfully');
+            } catch (error) {
+                res.status(500).send('Error deploying MySQLConnector microservice: ' + error.message);
+            }
+        }, 5000); // Adjust the delay time as needed
     } catch (error) {
         res.status(500).send('Error deploying MySQLConnector microservice: ' + error.message);
     }
 });
+app.get('/test-service',(req,res)=>{
+    return getService('mysql-connector-6f8a1ccd-51c4-42b4-acee-2944604b89aa');
+})
 
 module.exports = app;
